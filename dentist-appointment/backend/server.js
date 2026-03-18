@@ -1,9 +1,15 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
+// Security Middlewares
+app.use(helmet());
+
+app.use(cors({
+    origin: ["https://dentist-appointment-opal.vercel.app"],
+    credentials: true
+}));
 
 // Route imports
 const dentistRoutes = require('./routes/dentistRoutes');
