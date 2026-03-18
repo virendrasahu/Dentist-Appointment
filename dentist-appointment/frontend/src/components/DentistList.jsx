@@ -32,7 +32,7 @@ const DentistList = ({ onBook, searchTerm, selectedLocation }) => {
         if (searchTerm) {
             const lowSearch = searchTerm.toLowerCase();
             results = results.filter(d => 
-                d(d.name || "").toLowerCase().includes(lowSearch) ||
+                (d.name || "").toLowerCase().includes(lowSearch) ||
                 (d.clinicName || "").toLowerCase().includes(lowSearch) ||
                 (d.qualification || "").toLowerCase().includes(lowSearch)
             );
@@ -42,7 +42,7 @@ const DentistList = ({ onBook, searchTerm, selectedLocation }) => {
         if (selectedLocation && selectedLocation !== 'All Locations') {
             results = results.filter(d => 
                 (d.location || "").toLowerCase().includes(selectedLocation.toLowerCase()) ||
-    (d.address || "").toLowerCase().includes(selectedLocation.toLowerCase())
+                (d.address || "").toLowerCase().includes(selectedLocation.toLowerCase())
             );
         }
 
