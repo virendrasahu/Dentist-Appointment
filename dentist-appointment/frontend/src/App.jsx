@@ -129,7 +129,7 @@ function App() {
 
         <footer className="py-8 bg-white border-t border-gray-100 mt-auto">
           <div className="max-w-7xl mx-auto px-4 text-center">
-            <p className="text-gray-400 text-sm">© 2026 OroGlee. All rights reserved.</p>
+            <p className="text-gray-400 text-sm">© 2026 DentiBook. All rights reserved.</p>
           </div>
         </footer>
       </div>
