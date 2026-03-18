@@ -5,8 +5,6 @@ const api = axios.create({
   // withCredentials: true, // optional (keep if using auth/cookies)
 });
 
-export default api;
-
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('adminToken');
     if (token) {
