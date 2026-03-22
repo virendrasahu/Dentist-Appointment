@@ -2,6 +2,13 @@
 
 DentiBook is a modern, full-stack web application designed to streamline the process of booking dental appointments. It provides a user-friendly public interface for patients to discover dentists and book slots, alongside a secure, protected dashboard for clinic administrators to manage incoming appointments.
 
+## 🖼️ Preview
+
+| Dentist View | Admin Dashboard  |
+| :---: | :---: |
+| ![Dentist View](frontend/src/assets/dentist.jpg) | ![Admin Dashboard](frontend/src/assets/admin.jpg) |
+
+
 ---
 
 ## 🚀 Tech Stack
