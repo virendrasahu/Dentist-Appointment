@@ -4,12 +4,12 @@ DentiBook is a modern, full-stack web application designed to streamline the pro
 
 ## 🖼️ Preview
 
-| Dentist View | Admin Dashboard  |
+| Admin Dashboard | Dentist View |
 | :---: | :---: |
-| ![Dentist View](frontend/src/assets/dentist.jpg) | ![Admin Dashboard](frontend/src/assets/admin.jpg) |
-
+| ![Admin Dashboard](frontend/src/assets/admin.jpg) | ![Dentist View](frontend/src/assets/dentist.jpg) |
 
 ---
+
 
 ## 🚀 Tech Stack
 
