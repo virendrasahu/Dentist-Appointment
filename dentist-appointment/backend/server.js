@@ -28,7 +28,7 @@ app.use(
                 const allowed =
                     !origin ||
                     /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ||
-                    origin === 'https://dentist-appointment-opal.vercel.app';
+                    (typeof origin === 'string' && origin.endsWith('.vercel.app'));
                 callback(allowed ? null : new Error('Not allowed by CORS'), allowed);
             },
         credentials: true,
