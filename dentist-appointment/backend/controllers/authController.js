@@ -7,19 +7,19 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_super_secret_jwt_key_here';
 const loginAdmin = async (req, res) => {
     try {
         const { username, password } = req.body;
-        
+
         // Find admin
         const admin = await Admin.findOne({ username });
         if (!admin) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        
+
         // Verify password
         const isMatch = await bcrypt.compare(password, admin.password);
         if (!isMatch) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
-        
+
         // Create token
         const payload = {
             id: admin._id,
@@ -27,7 +27,7 @@ const loginAdmin = async (req, res) => {
             role: admin.role
         };
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
-        
+
         res.json({
             token,
             admin: payload

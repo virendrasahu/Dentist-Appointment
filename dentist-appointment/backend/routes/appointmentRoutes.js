@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAppointments, createAppointment, updateAppointmentStatus } = require('../controllers/appointmentController');
+const { getAppointments, createAppointment, updateAppointmentStatus, deleteAppointment } = require('../controllers/appointmentController');
 const { protect } = require('../middleware/authMiddleware');
 const { validateAppointment, handleValidationErrors } = require('../middleware/validationMiddleware');
 
@@ -18,5 +18,10 @@ router.post('/', validateAppointment, handleValidationErrors, createAppointment)
 // @desc    Update appointment status
 // @access  Private Admin
 router.put('/:id/status', protect, updateAppointmentStatus);
+
+// @route   DELETE /api/appointments/:id
+// @desc    Delete an appointment
+// @access  Private Admin
+router.delete('/:id', protect, deleteAppointment);
 
 module.exports = router;

@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, // from .env
-  // withCredentials: true, // optional (keep if using auth/cookies)
+    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
 });
 
 api.interceptors.request.use((config) => {
@@ -18,11 +17,14 @@ api.interceptors.response.use(
         return response;
     },
     (error) => {
-        if (error.response && error.response.status === 401) {
-            // Token expired or not authorized globally
-            localStorage.removeItem('adminToken');
-            // If we are not already at root, or we want forcefully logout user:
-            window.location.reload();
+        if (error.response?.status === 401) {
+            const isAuthRequest = error.config?.url?.includes('/auth/');
+            if (!isAuthRequest) {
+                localStorage.removeItem('adminToken');
+                if (window.location.pathname.startsWith('/dashboard')) {
+                    window.location.href = '/login';
+                }
+            }
         }
         return Promise.reject(error);
     }

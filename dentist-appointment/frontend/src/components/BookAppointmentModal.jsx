@@ -23,16 +23,19 @@ const BookAppointmentModal = ({ dentist, isOpen, onClose, onShowSuccess }) => {
         try {
             const appointmentData = {
                 ...formData,
+                age: Number(formData.age),
                 dentistId: dentist._id
             };
             await api.post('/appointments', appointmentData);
             setLoading(false);
+            // notify parent (refresh list or show success state)
+            if (onShowSuccess) onShowSuccess();
             onClose();
-            toast.success('Your appointment has been successfully booked!');
             // Reset form
             setFormData({ patientName: '', age: '', gender: '', date: '', time: '' });
         } catch (err) {
             const errorMessage = err.response?.data?.message || 'Failed to book appointment.';
+            setError(errorMessage);
             toast.error(errorMessage);
             setLoading(false);
         }
@@ -67,6 +70,7 @@ const BookAppointmentModal = ({ dentist, isOpen, onClose, onShowSuccess }) => {
                                 name="patientName"
                                 value={formData.patientName}
                                 onChange={handleChange}
+                                disabled={loading}
                                 className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                                 placeholder="John Doe"
                             />
@@ -81,6 +85,7 @@ const BookAppointmentModal = ({ dentist, isOpen, onClose, onShowSuccess }) => {
                                     name="age"
                                     value={formData.age}
                                     onChange={handleChange}
+                                    disabled={loading}
                                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                                     placeholder="25"
                                 />
@@ -92,6 +97,7 @@ const BookAppointmentModal = ({ dentist, isOpen, onClose, onShowSuccess }) => {
                                     name="gender"
                                     value={formData.gender}
                                     onChange={handleChange}
+                                    disabled={loading}
                                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                                 >
                                     <option value="">Select</option>
@@ -111,6 +117,7 @@ const BookAppointmentModal = ({ dentist, isOpen, onClose, onShowSuccess }) => {
                                     name="date"
                                     value={formData.date}
                                     onChange={handleChange}
+                                    disabled={loading}
                                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                                 />
                             </div>
@@ -122,11 +129,13 @@ const BookAppointmentModal = ({ dentist, isOpen, onClose, onShowSuccess }) => {
                                     name="time"
                                     value={formData.time}
                                     onChange={handleChange}
+                                    disabled={loading}
                                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                                 />
                             </div>
                         </div>
 
+                        {error && <p className="text-sm text-red-500">{error}</p>}
                         <button
                             disabled={loading}
                             type="submit"

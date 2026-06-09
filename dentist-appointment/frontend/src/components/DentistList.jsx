@@ -12,8 +12,9 @@ const DentistList = ({ onBook, searchTerm, selectedLocation }) => {
         const fetchDentists = async () => {
             try {
                 const response = await api.get('/dentists');
-                setDentists(response.data);
-                setFilteredDentists(response.data);
+                const data = Array.isArray(response.data) ? response.data : [];
+                setDentists(data);
+                setFilteredDentists(data);
                 setLoading(false);
             } catch (err) {
                 setError('Failed to load dentists. Please try again later.');

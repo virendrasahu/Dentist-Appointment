@@ -71,8 +71,26 @@ const updateAppointmentStatus = async (req, res) => {
     }
 };
 
+// @desc    Delete an appointment
+// @route   DELETE /api/appointments/:id
+// @access  Private (Admin only)
+const deleteAppointment = async (req, res) => {
+    try {
+        const appointment = await Appointment.findByIdAndDelete(req.params.id);
+
+        if (!appointment) {
+            return res.status(404).json({ message: 'Appointment not found' });
+        }
+
+        res.json({ message: 'Appointment deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to delete appointment', error: err.message });
+    }
+};
+
 module.exports = {
     getAppointments,
     createAppointment,
-    updateAppointmentStatus
+    updateAppointmentStatus,
+    deleteAppointment,
 };

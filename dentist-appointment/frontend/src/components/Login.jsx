@@ -11,6 +11,7 @@ const Login = () => {
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
+        setError('');
     };
 
     const handleSubmit = async (e) => {
@@ -26,6 +27,7 @@ const Login = () => {
             navigate('/dashboard');
         } catch (err) {
             const errorMessage = err.response?.data?.message || 'Failed to login';
+            setError(errorMessage);
             toast.error(errorMessage);
             setLoading(false);
         }
@@ -80,6 +82,11 @@ const Login = () => {
                             </div>
                         ) : 'Admin Sign In'}
                     </button>
+                    {error && (
+                        <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+                            {error}
+                        </div>
+                    )}
                     <div className="text-center mt-4">
                         <p className="text-sm text-gray-600">
                             Don't have an account? <Link to="/signup" className="text-teal-600 font-semibold hover:underline">Sign up</Link>

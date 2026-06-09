@@ -48,7 +48,7 @@ const dentists = [
     },
     {
         name: "Dr. Priya Sharma",
-        photo: "https://images.unsplash.com/photo-1559839734-2b71f1536783?auto=format&fit=crop&q=80&w=600&h=600",
+        photo: "https://cdn.pixabay.com/photo/2017/03/14/03/20/woman-2141808_1280.jpg",
         specialization: "BDS, MDS - Periodontics",
         experience: 15,
         clinicName: "Pearl Dental Care",
@@ -73,15 +73,15 @@ const seedDB = async () => {
         const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://virendra2609vs_db_user:fqI6hcXSQoPlD3P0@cluster0.nciecfm.mongodb.net/?appName=Cluster0';
         await mongoose.connect(MONGODB_URI);
         console.log('Connected to MongoDB');
-        
+
         // 1. Clear Collections
         await Dentist.deleteMany({});
         await Admin.deleteMany({});
         await Appointment.deleteMany({});
-        
+
         // 2. Insert Dentists
         const insertedDentists = await Dentist.insertMany(dentists);
-        
+
         // Find specific dentist to link to
         const drOkafor = insertedDentists.find(d => d.name === "Dr. David Okafor");
 
@@ -94,7 +94,7 @@ const seedDB = async () => {
                 dentistId: drOkafor._id,
                 date: "2026-03-18",
                 time: "10:00 AM",
-                status: "Confirmed"
+                status: "Booked"
             },
             {
                 patientName: "Virendra Sahu",
@@ -116,7 +116,7 @@ const seedDB = async () => {
             password: hashedPassword,
             role: 'superadmin'
         });
-        
+
         console.log('Database seeded successfully with DentalFlow data, Admin user, and Appointments');
         process.exit();
     } catch (err) {

@@ -3,13 +3,9 @@ const mongoose = require('mongoose');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const dotenv = require('dotenv');
-// Security Middlewares
-app.use(helmet());
+const cors = require('cors');
 
-app.use(cors({
-    origin: ["https://dentist-appointment-opal.vercel.app"],
-    credentials: true
-}));
+dotenv.config();
 
 // Route imports
 const dentistRoutes = require('./routes/dentistRoutes');
@@ -19,20 +15,31 @@ const { router: authRouter } = require('./routes/authRoutes');
 // Middleware imports
 const { errorHandler } = require('./middleware/errorMiddleware');
 
-dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Security Middlewares
 app.use(helmet()); // Set security HTTP headers
-app.use(cors()); // Enable CORS
+app.use(
+    cors({
+        origin: process.env.CORS_ORIGIN
+            ? process.env.CORS_ORIGIN.split(',')
+            : (origin, callback) => {
+                const allowed =
+                    !origin ||
+                    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin) ||
+                    origin === 'https://dentist-appointment-opal.vercel.app';
+                callback(allowed ? null : new Error('Not allowed by CORS'), allowed);
+            },
+        credentials: true,
+    })
+);
 
 // Rate limiting to prevent brute-force attacks
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
-    message: 'Too many requests from this IP, please try again after 15 minutes'
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: 'Too many requests from this IP, please try again after 15 minutes',
 });
 app.use('/api', limiter);
 
@@ -43,6 +50,12 @@ app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/dentists', dentistRoutes);
 app.use('/api/appointments', appointmentRoutes);
+
+// Handle unknown routes with a descriptive error message
+app.use((req, res, next) => {
+    res.status(404);
+    next(new Error(`Route not found: ${req.originalUrl}`));
+});
 
 // Centralized Error Handling Middleware
 app.use(errorHandler);
@@ -55,7 +68,7 @@ const connectDB = async () => {
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (err) {
         console.error(`Error connecting to MongoDB: ${err.message}`);
-        process.exit(1); // Exit process with failure
+        process.exit(1);
     }
 };
 

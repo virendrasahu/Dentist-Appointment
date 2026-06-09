@@ -6,15 +6,18 @@ import { useNavigate, Link } from 'react-router-dom';
 const Signup = () => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
+        setError('');
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setError('');
 
         try {
             await api.post('/auth/register', credentials);
@@ -22,7 +25,10 @@ const Signup = () => {
             setLoading(false);
             navigate('/login');
         } catch (err) {
-            const errorMessage = err.response?.data?.message || err.response?.data?.errors?.map(e => e.msg).join(', ') || 'Failed to signup';
+            const errorMessage = err.response?.data?.message
+                || (Array.isArray(err.response?.data?.errors) ? err.response.data.errors.map(error => error.msg).join(', ') : '')
+                || 'Failed to signup';
+            setError(errorMessage);
             toast.error(errorMessage);
             setLoading(false);
         }
@@ -77,7 +83,11 @@ const Signup = () => {
                             </div>
                         ) : 'Sign Up'}
                     </button>
-                    
+                    {error && (
+                        <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+                            {error}
+                        </div>
+                    )}
                     <div className="text-center mt-4">
                         <p className="text-sm text-gray-600">
                             Already have an account? <Link to="/login" className="text-teal-600 font-semibold hover:underline">Log in</Link>
